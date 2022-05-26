@@ -21,8 +21,8 @@ export const Layout:FC<IPropsLayout> = ({children, title}) => {
             <meta name='keywords' content={`${title}, pokemon, pokedex`}/>
             
             <meta property="og:title" content={`Información sobre el pokemon ${title}`} />
-            <meta property="og:url" content={`${origin}/img/banner.png`} />
-            <meta property="og:image" content="" />
+            {/* <meta property="og:url" content={`${origin}/img/banner.png`} /> */}
+            <meta property="og:image" content={`${origin}/img/banner.png`} />
             <meta property="og:description" content={`Este es la pagina de ${title}`} />
         </Head>
         <Nabvar/>
