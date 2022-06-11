@@ -40,10 +40,20 @@ export const getStaticProps:GetStaticProps = async({params}) => {
     const {name:pokeName} = params as {name:string};
     const pokemon = await getPokemonInfo(pokeName);
 
+    if(!pokemon){
+      return {
+        redirect: {
+          destination: '/',
+          permanent: false //la redireccion a otra pagina ya no existe para que los boot de google la encuentren
+        }
+      }
+    }
+
     return {
         props: {
          pokemon
-        }
+        },//seconds for Incremental Static Regeneration
+        revalidate: 86400
       }
 }
 

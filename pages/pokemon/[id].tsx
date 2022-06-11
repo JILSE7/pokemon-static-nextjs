@@ -6,7 +6,7 @@ import { Grid } from '@nextui-org/react';
 import { Layout, PokemonInto, PokemonInfo } from '../../components'
 import { pokeApi } from '../../api';
 import { PokeAPIGetById } from '../../interfaces';
-import { localFavorites } from '../../utils';
+import { getPokemonInfo, localFavorites } from '../../utils';
 
 import confetti from 'canvas-confetti';
 import { PokeAPIResponse } from '../../interfaces/pokeApi';
@@ -72,7 +72,7 @@ export const getStaticPaths: GetStaticPaths = async (ctx) => {
 
   return {
     paths: pokemon151,
-    fallback: false
+    fallback: 'blocking'
   }
 }
 //fallback: false - manda al 404 si la pagina no fue previamente renderizada
@@ -82,12 +82,23 @@ export const getStaticProps: GetStaticProps = async ({params}) => {
   
   const {id} = params as {id:string}
   
-  const {data} = await pokeApi.get<PokeAPIGetById>(`/pokemon/${id}`);
+  const pokemon = await getPokemonInfo(id);
+  
+  if(!pokemon){
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false //la redireccion a otra pagina ya no existe para que los boot de google la encuentren
+      }
+    }
+  }
+  
   
   return {
     props: {
-     pokemon:data
-    }
+     pokemon:pokemon
+    },//seconds for Incremental Static Regeneration
+    revalidate: 86400
   }
 }
 
